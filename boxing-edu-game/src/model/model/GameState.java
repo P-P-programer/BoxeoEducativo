@@ -1,3 +1,6 @@
+package model;
+
+
 public class GameState {
     private int currentRound;
     private int playerScore;

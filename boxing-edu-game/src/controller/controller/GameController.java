@@ -1,3 +1,8 @@
+package controller;
+
+import model.GameState;
+import view.GameView;
+
 public class GameController {
     private GameState gameState;
     private GameView gameView;

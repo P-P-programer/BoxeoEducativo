@@ -1,3 +1,4 @@
+package view;
 public class MainMenuView {
     
     public void initializeMenu() {

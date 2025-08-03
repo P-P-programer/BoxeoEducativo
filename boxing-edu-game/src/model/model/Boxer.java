@@ -1,3 +1,5 @@
+package model;
+
 public class Boxer {
     private String name;
     private int health;
