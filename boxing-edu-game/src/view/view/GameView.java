@@ -2,32 +2,21 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
+import model.Boxer;
 
 public class GameView extends JPanel {
     private JFrame frame;
     private BufferedImage[] boxerSprites;
-    private int currentSprite = 0;
-    private int x = 150, y = 100;
-    private boolean moving = false;
+    private Boxer boxer;
 
-    public GameView() {
+    public GameView(Boxer boxer) {
+        this.boxer = boxer;
         loadSprites();
         setPreferredSize(new Dimension(400, 300));
         setBackground(Color.WHITE);
-
-        // Key bindings para WASD
-        getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("W"), "moveUp");
-        getActionMap().put("moveUp", new MoveAction(0, -10));
-        getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("S"), "moveDown");
-        getActionMap().put("moveDown", new MoveAction(0, 10));
-        getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("A"), "moveLeft");
-        getActionMap().put("moveLeft", new MoveAction(-10, 0));
-        getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("D"), "moveRight");
-        getActionMap().put("moveRight", new MoveAction(10, 0));
     }
 
     private void loadSprites() {
@@ -44,8 +33,13 @@ public class GameView extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (boxerSprites[0] != null) {
-            g.drawImage(boxerSprites[currentSprite], x, y, null);
+        if (boxerSprites[0] != null && boxer != null) {
+            g.drawImage(
+                boxerSprites[boxer.getCurrentSprite()],
+                boxer.getX(),
+                boxer.getY(),
+                null
+            );
         }
     }
 
@@ -58,23 +52,7 @@ public class GameView extends JPanel {
         frame.setVisible(true);
     }
 
-    private class MoveAction extends AbstractAction {
-        private int dx, dy;
-        public MoveAction(int dx, int dy) {
-            this.dx = dx;
-            this.dy = dy;
-        }
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            x += dx;
-            y += dy;
-            moving = (dx != 0 || dy != 0);
-            if (moving) {
-                currentSprite = (currentSprite + 1) % 3; // Cambia sprite solo si se mueve
-            } else {
-                currentSprite = 0; // Quieto
-            }
-            repaint();
-        }
+    public void actualizarVista() {
+        repaint();
     }
 }
