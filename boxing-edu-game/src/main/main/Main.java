@@ -1,21 +1,30 @@
 package main;
 
 import controller.GameController;
-import view.GameView;
+import controller.MainMenuController;
 import model.Boxer;
+import model.MenuState;
+import view.GameView;
+import view.MainMenuView;
 
 public class Main {
     public static void main(String[] args) {
-        // Crea el modelo del boxeador (nombre, salud, fuerza, posición inicial x, y)
-        Boxer boxer = new Boxer("Jugador", 100, 10, 150, 100);
+        MenuState menuState = MenuState.MENU;
 
-        // Crea la vista y le pasa el modelo
-        GameView gameView = new GameView(boxer);
+        while (menuState != MenuState.EXIT) {
+            MainMenuView menuView = new MainMenuView();
+            MainMenuController menuController = new MainMenuController(menuView);
+            menuState = menuController.showMenu();
 
-        // Crea el controlador y le pasa la vista y el modelo
-        GameController gameController = new GameController(gameView, boxer);
-
-        // Inicia el juego
-        gameController.startGame();
+            if (menuState == MenuState.START_GAME) {
+                // Inicializa las estadisticas del personaje
+                Boxer boxer = new Boxer("Jugador", 100, 10, 150, 100);
+                GameView gameView = new GameView(boxer);
+                GameController gameController = new GameController(gameView, boxer);
+                gameController.startGame();
+                menuState = MenuState.MENU; // Vuelve al menú al terminar el juego
+            }
+        }
+        System.exit(0);
     }
 }

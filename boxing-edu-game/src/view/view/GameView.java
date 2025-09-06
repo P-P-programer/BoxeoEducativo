@@ -22,9 +22,9 @@ public class GameView extends JPanel {
     private void loadSprites() {
         boxerSprites = new BufferedImage[3];
         try {
-            boxerSprites[0] = ImageIO.read(new File("recursos/boxeadores/Boxeador_0001.png"));
-            boxerSprites[1] = ImageIO.read(new File("recursos/boxeadores/Boxeador_0002.png"));
-            boxerSprites[2] = ImageIO.read(new File("recursos/boxeadores/Boxeador_0003.png"));
+            boxerSprites[0] = ImageIO.read(getClass().getResource("/recursos/boxeadores/Boxeador_0001.png"));
+            boxerSprites[1] = ImageIO.read(getClass().getResource("/recursos/boxeadores/Boxeador_0002.png"));
+            boxerSprites[2] = ImageIO.read(getClass().getResource("/recursos/boxeadores/Boxeador_0003.png"));
         } catch (Exception e) {
             System.out.println("Error cargando sprites: " + e.getMessage());
         }
