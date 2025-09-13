@@ -17,6 +17,8 @@ import model.Boxer;
 import model.GameState;
 import view.GameView;
 
+//controlador genral del juego
+
 public class GameController {
 	private GameState gameState;
 	private GameView gameView;
