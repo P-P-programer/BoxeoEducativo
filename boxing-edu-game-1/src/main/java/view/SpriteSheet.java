@@ -15,14 +15,13 @@ public class SpriteSheet {
     }
 
     // Extrae una animación de una columna (frames en vertical)
-    public BufferedImage[] getAnimation(int col, int frameCount) {
+    public BufferedImage[] getAnimation(int col, int frameCount, int yOffset) {
         BufferedImage[] anim = new BufferedImage[frameCount];
         for (int i = 0; i < frameCount; i++) {
-            anim[i] = sheet.getSubimage(
-                col * frameWidth,   // x
-                i * frameHeight,    // y
-                frameWidth, frameHeight
-            );
+            int x = col * frameWidth;
+            int y = yOffset + i * frameHeight;
+            System.out.println("Extrayendo frame: col=" + col + " fila=" + i + " x=" + x + " y=" + y);
+            anim[i] = sheet.getSubimage(x, y, frameWidth, frameHeight);
         }
         return anim;
     }

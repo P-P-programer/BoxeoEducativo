@@ -18,6 +18,12 @@
 
     <dependencies>
         <!-- Aquí puedes agregar las dependencias necesarias para tu proyecto -->
+    
+      <dependency>
+        <groupId>com.viaoa</groupId>
+        <artifactId>oa-web</artifactId>
+        <version>3.7.4</version>
+      </dependency>
     </dependencies>
 
     <build>

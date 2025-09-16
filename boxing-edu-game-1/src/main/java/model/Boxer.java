@@ -6,6 +6,9 @@ public class Boxer {
     private int strength;
     private int x, y;
     private int currentSprite;
+    private double yPosVirtual = 0; // Altura sobre el suelo (en "pixeles virtuales")
+    private double yVel = 0;
+    private boolean enSuelo = true;
 
     public Boxer(String name, int health, int strength, int x, int y) {
         this.name = name;
@@ -16,9 +19,9 @@ public class Boxer {
         this.currentSprite = 0;
     }
 
-    public void move(int dx, int dy) {
-        this.x += dx;
-        this.y += dy;
+    public void move(int dx, int dy, int minX, int maxX, int minY, int maxY) {
+        this.x = Math.max(minX, Math.min(this.x + dx, maxX));
+        this.y = Math.max(minY, Math.min(this.y + dy, maxY));
         animate();
     }
 
@@ -31,7 +34,9 @@ public class Boxer {
     }
 
     public int getX() { return x; }
+    public void setX(int x) { this.x = x; }
     public int getY() { return y; }
+    public void setY(int y) { this.y = y; }
     public int getCurrentSprite() { return currentSprite; }
 
     public void attack(Boxer opponent) {
@@ -40,6 +45,10 @@ public class Boxer {
 
     public void defend(int damage) {
         health -= damage;
+    }
+
+    public void recibirDanio(int cantidad) {
+        this.health = Math.max(0, this.health - cantidad);
     }
 
     public boolean isKnockedOut() {
@@ -57,4 +66,11 @@ public class Boxer {
     public int getStrength() {
         return strength;
     }
+
+    public double getYPosVirtual() { return yPosVirtual; }
+    public void setYPosVirtual(double y) { this.yPosVirtual = y; }
+    public double getYVel() { return yVel; }
+    public void setYVel(double v) { this.yVel = v; }
+    public boolean isEnSuelo() { return enSuelo; }
+    public void setEnSuelo(boolean suelo) { this.enSuelo = suelo; }
 }

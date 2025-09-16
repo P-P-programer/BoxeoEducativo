@@ -3,10 +3,12 @@ package main;
 import controller.GameController;
 import controller.MainMenuController;
 import model.Boxer;
+import model.Enemy;
 import model.MenuState;
 import view.GameView;
 import view.MainMenuView;
 
+// Próximo ejecutable
 public class Main {
     public static void main(String[] args) {
         MenuState menuState = MenuState.MENU;
@@ -18,8 +20,9 @@ public class Main {
 
             if (menuState == MenuState.START_GAME) {
                 Boxer boxer = new Boxer("Jugador", 100, 10, 150, 100);
-                GameView gameView = new GameView(boxer);
-                GameController gameController = new GameController(gameView, boxer);
+                Enemy enemy = new Enemy(100, 20, 200, 200); // <-- crea el enemigo aquí
+                GameView gameView = new GameView(boxer, enemy); // <-- pásalo aquí
+                GameController gameController = new GameController(gameView, boxer, enemy); 
                 gameController.startGame();
                 gameController.waitForGameEnd(); // Espera hasta que el jugador salga del juego
                 menuState = MenuState.MENU;

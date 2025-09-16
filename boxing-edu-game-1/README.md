@@ -26,10 +26,11 @@ boxing-edu-game
 │   │   │       └── MainMenuView.java
 │   │   └── resources
 │   │       ├── boxeadores
-│   │       │   ├── Boxeador_0001.png
-│   │       │   ├── Boxeador_0002.png
-│   │       │   └── Boxeador_0003.png
+│   │       │   ├── Char_3_no_Armor.png
+|   |       |
 │   │       ├── enemigos
+|   |       |  |_enemigo1.png
+|   |       |
 │   │       ├── fondo
 │   │       ├── sonidos
 │   │       └── UI
