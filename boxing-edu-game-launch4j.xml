@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Users\felip\Desktop\BoxeoEducativo\boxing-edu-game-1\target\boxing-edu-game-1.0-SNAPSHOT.jar</jar>
+  <outfile>C:\Users\felip\Desktop\BoxeoEducativo\boxing-edu-game-1\boxeo-edu-game.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl></downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon></icon>
+  <classPath>
+    <mainClass>main.Main</mainClass>
+    <cp>boxing-edu-game-1.0-SNAPSHOT,jar</cp>
+  </classPath>
+  <jre>
+    <path>jdk-21.0.8+9-jre</path>
+    <requiresJdk>false</requiresJdk>
+    <requires64Bit>false</requires64Bit>
+    <minVersion></minVersion>
+    <maxVersion></maxVersion>
+  </jre>
+</launch4jConfig>
