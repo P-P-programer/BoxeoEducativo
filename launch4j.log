@@ -59,3 +59,23 @@ Cannot run java(w) -version
 Error msg:	This application requires a Java Runtime Environment.
 Error:		Esta versión de %1 no es compatible con la versión de Windows que está ejecutando. Compruebe la información de sistema del equipo y después póngase en contacto con el anunciante de software.
 
+
+
+Version:	3.50
+CmdLine:	C:\Users\felip\Desktop\BoxeoEducativo\boxeo-edu-game.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	C:\Users\felip\Desktop\BoxeoEducativo\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	
+Java max ver:	
+JRE paths:	jdk-21.0.8+9-jre
+Check launcher:	C:\Users\felip\Desktop\BoxeoEducativo\jdk-21.0.8+9-jre\bin\javaw.exe (OK)
+Version string: 1.021.000_008 / 64-Bit (OK)
+Main class:	main.Main
+Add classpath:	BoxeoEducativo-1.0-SNAPSHOT,jar
+Launcher:	C:\Users\felip\Desktop\BoxeoEducativo\jdk-21.0.8+9-jre\bin\javaw.exe
+Launcher args:	-classpath "C:\Users\felip\Desktop\BoxeoEducativo\boxeo-edu-game.exe;BoxeoEducativo-1.0-SNAPSHOT,jar" main.Main
+Args length:	111/32768 chars
+Exit code:	0

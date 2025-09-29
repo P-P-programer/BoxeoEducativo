@@ -3,23 +3,18 @@ package model;
 public class Question {
     private String questionText;
     private String[] options;
-    private String correctAnswer;
+    private int correctIndex;
+    private int timeLimitSeconds;
 
-    public Question(String questionText, String[] options, String correctAnswer) {
+    public Question(String questionText, String[] options, int correctIndex, int timeLimitSeconds) {
         this.questionText = questionText;
         this.options = options;
-        this.correctAnswer = correctAnswer;
+        this.correctIndex = correctIndex;
+        this.timeLimitSeconds = timeLimitSeconds;
     }
 
-    public String getQuestionText() {
-        return questionText;
-    }
-
-    public String[] getOptions() {
-        return options;
-    }
-
-    public boolean isCorrectAnswer(String answer) {
-        return correctAnswer.equals(answer);
-    }
+    public String getQuestionText() { return questionText; }
+    public String[] getOptions() { return options; }
+    public int getCorrectIndex() { return correctIndex; }
+    public int getTimeLimitSeconds() { return timeLimitSeconds; }
 }

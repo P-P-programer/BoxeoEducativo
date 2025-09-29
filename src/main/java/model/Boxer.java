@@ -82,4 +82,8 @@ public class Boxer {
         int hitboxY = y + (spriteSize - hitboxSize) / 2;
         return new Rectangle(hitboxX, hitboxY, hitboxSize, hitboxSize);
     }
+
+    public void curar(int cantidad) {
+        this.health = Math.min(100, this.health + cantidad);
+    }
 }

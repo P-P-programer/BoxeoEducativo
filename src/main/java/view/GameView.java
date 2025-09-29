@@ -6,6 +6,10 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import model.Boxer;
 import model.Enemy;
+import java.util.List;
+import java.util.ArrayList;
+import model.PowerUp;
+import model.Question;
 
 /**
  * Vista principal del juego.
@@ -15,7 +19,7 @@ import model.Enemy;
 public class GameView extends JPanel {
     // --- Referencias a los modelos ---
     private Boxer boxer;
-    private Enemy enemy;
+    // private Enemy enemy;
 
     // --- Animaciones del boxeador ---
     private int boxerIdleFrame = 0;
@@ -44,10 +48,17 @@ public class GameView extends JPanel {
     private JFrame frame;
     private Runnable onSalir;
 
+    // --- PowerUps ---
+    private List<PowerUp> powerUps = new ArrayList<>();
+    private static final int POWERUP_Y_LIMIT = 200; // Límite de altura en coordenadas lógicas
+
+    // --- Enemigos ---
+    private List<Enemy> enemies = new ArrayList<>();
+
     // --- Constructor ---
-    public GameView(Boxer boxer, Enemy enemy) {
+    public GameView(Boxer boxer, List<Enemy> enemies) {
         this.boxer = boxer;
-        this.enemy = enemy;
+        this.enemies = enemies;
         loadSprites();
         loadBackgrounds();
         setPreferredSize(new Dimension(400, 300));
@@ -130,6 +141,18 @@ public class GameView extends JPanel {
             g.drawImage(currentBackground, 0, 0, panelWidth, panelHeight, null);
         }
 
+        // --- Dibuja los PowerUps ---
+        for (PowerUp powerUp : powerUps) {
+            if (!powerUp.isCollected() && powerUp.getY() <= POWERUP_Y_LIMIT) {
+                int px = (int) (powerUp.getX() * scale);
+                int py = (int) (powerUp.getY() * scale);
+                g.setColor(Color.MAGENTA);
+                g.fillOval(px, py, spriteSize / 2, spriteSize / 2); // Orbe simple
+                g.setColor(Color.BLACK);
+                g.drawOval(px, py, spriteSize / 2, spriteSize / 2);
+            }
+        }
+
         // Boxeador
         int x = Math.max(0, Math.min((int) (boxer.getX() * scale), panelWidth - spriteSize));
         int y = Math.max(0, Math.min((int) (boxer.getY() * scale), panelHeight - spriteSize));
@@ -146,13 +169,26 @@ public class GameView extends JPanel {
         g.drawImage(boxerSprite, x, y, spriteSize, spriteSize, null);
 
         // Enemigo
-        int enemigoXScaled = Math.max(0, Math.min((int) (enemy.getX() * scale), panelWidth - spriteSize));
-        int enemigoYScaled = Math.max(0, Math.min((int) (enemy.getY() * scale), panelHeight - spriteSize));
-        if (enemigoAtacando) {
-            int frame = Math.max(0, Math.min(enemigoFrame, 5));
-            g.drawImage(attackAnimations[enemigoDirection][frame], enemigoXScaled, enemigoYScaled, spriteSize, spriteSize, null);
-        } else {
-            g.drawImage(walkAnimations[enemigoDirection][enemigoFrame], enemigoXScaled, enemigoYScaled, spriteSize, spriteSize, null);
+        int enemigoIndex = 0;
+        for (Enemy enemigoLoop : enemies) {
+            int enemigoLoopXScaled = Math.max(0, Math.min((int) (enemigoLoop.getX() * scale), panelWidth - spriteSize));
+            int enemigoLoopYScaled = Math.max(0, Math.min((int) (enemigoLoop.getY() * scale), panelHeight - spriteSize));
+            // Usa los atributos del enemigo individual
+            int dir = enemigoLoop.getDirection();
+            int frame = enemigoLoop.getCurrentFrame();
+            g.drawImage(walkAnimations[dir][frame], enemigoLoopXScaled, enemigoLoopYScaled, spriteSize, spriteSize, null);
+
+            // Barra de vida del enemigo
+            int vidaEnemigo = enemigoLoop.getHealth();
+            int barraX = getWidth() - 220;
+            int barraY = 50 + enemigoIndex * 30;
+            g.setColor(Color.GREEN);
+            g.fillRect(barraX, barraY, vidaEnemigo * 2, 20);
+            g.setColor(Color.BLACK);
+            g.drawRect(barraX, barraY, 200, 20);
+            g.drawString("Enemigo " + (enemigoIndex + 1), barraX, barraY - 5);
+
+            enemigoIndex++;
         }
 
         // Barra de vida del boxeador
@@ -163,15 +199,37 @@ public class GameView extends JPanel {
         g.drawRect(20, 20, 200, 20);
         g.drawString("Jugador", 20, 15);
 
-        // Barra de vida del enemigo
-        int vidaEnemigo = enemy.getHealth();
-        g.setColor(Color.GREEN);
-        g.fillRect(getWidth() - 220, 20, vidaEnemigo * 2, 20);
-        g.setColor(Color.BLACK);
-        g.drawRect(getWidth() - 220, 20, 200, 20);
-        g.drawString("Enemigo", getWidth() - 220, 15);
-    }
+        // Dibuja hitbox del boxeador
+        Rectangle boxerHitbox = boxer.getHitbox(spriteSize);
+        g.setColor(new Color(255, 0, 0, 120)); // Rojo semi-transparente
+        g.drawRect((int)(boxerHitbox.x * scale), (int)(boxerHitbox.y * scale), (int)(boxerHitbox.width * scale), (int)(boxerHitbox.height * scale));
 
+        // Dibuja hitbox de los PowerUps
+        for (PowerUp powerUp : powerUps) {
+            if (!powerUp.isCollected() && powerUp.getY() <= POWERUP_Y_LIMIT) {
+                Rectangle powerUpHitbox = powerUp.getHitbox(spriteSize / 2);
+                g.setColor(new Color(0, 0, 255, 120)); // Azul semi-transparente
+                g.drawRect((int)(powerUpHitbox.x * scale), (int)(powerUpHitbox.y * scale), (int)(powerUpHitbox.width * scale), (int)(powerUpHitbox.height * scale));
+            }
+        }
+
+        // Dibuja hitbox de los enemigos
+        for (Enemy enemigoLoop : enemies) {
+            Rectangle enemyHitbox = new Rectangle(enemigoLoop.getX(), enemigoLoop.getY(), spriteSize, spriteSize);
+            g.setColor(new Color(0, 255, 0, 120)); // Verde semi-transparente
+            g.drawRect((int)(enemyHitbox.x * scale), (int)(enemyHitbox.y * scale), (int)(enemyHitbox.width * scale), (int)(enemyHitbox.height * scale));
+        }
+
+        for (Enemy enemy : enemies) {
+            // Lógica de movimiento y ataque individual
+            // Colisión con el boxeador
+            Rectangle enemyHitbox = new Rectangle(enemy.getX(), enemy.getY(), spriteSize, spriteSize);
+            if (boxerHitbox.intersects(enemyHitbox)) {
+                // Daño al boxeador, etc.
+            }
+        }
+    }
+   
     // --- Métodos para animaciones y control ---
 
     public int getBoxerIdleFrame() { return boxerIdleFrame; }
@@ -206,11 +264,30 @@ public class GameView extends JPanel {
     }
 
     public void setEnemy(Enemy enemy) {
-        this.enemy = enemy;
+        if (enemy != null) {
+            this.enemies.add(enemy);
+        }
+    }
+
+    public void setEnemies(List<Enemy> enemies) {
+        this.enemies = enemies;
     }
 
     public void actualizarVista() {
         repaint();
+    }
+
+    // --- Métodos para gestionar PowerUps ---
+    public void addPowerUp(PowerUp powerUp) {
+        powerUps.add(powerUp);
+    }
+
+    public List<PowerUp> getPowerUps() {
+        return powerUps;
+    }
+
+    public void clearPowerUps() {
+        powerUps.clear();
     }
 
     // --- UI y ciclo de vida ---
@@ -242,5 +319,25 @@ public class GameView extends JPanel {
             frame.setVisible(false);
             frame.dispose();
         }
+    }
+
+    public int getPowerUpYLimit() {
+        //Getter del power up y limit
+        return POWERUP_Y_LIMIT;
+    }
+
+    public int mostrarPregunta(Question pregunta) {
+        String[] opciones = pregunta.getOptions();
+        int seleccion = JOptionPane.showOptionDialog(
+            frame,
+            pregunta.getQuestionText(),
+            "Pregunta de Poder",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            opciones,
+            opciones[0]
+        );
+        return seleccion; // Retorna el índice seleccionado (-1 si canceló)
     }
 }
